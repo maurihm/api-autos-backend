@@ -16,13 +16,13 @@ module.exports = {
     dialect: 'postgres'
   },
   production: {
-    // Render usará esta configuración
-    use_env_variable: 'DATABASE_URL', 
+    use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
+    logging: false,
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false
+        rejectUnauthorized: false // <--- ESTO ES LO MÁS IMPORTANTE
       }
     }
   }
