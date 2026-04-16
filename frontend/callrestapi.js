@@ -1,4 +1,5 @@
-var url = "http://localhost:3300/api/autos";
+// Usamos la constante BASE_URL definida en config.js
+var url = BASE_URL + "/autos";
 
 // 1. POST - Guardar Auto
 function postAuto() {
