@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API de Autos</title>
+    <!-- Google Fonts: Google Sans (via separate link if needed) or Roboto as fallback -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+            /* Light gray background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            color: #202124;
+        }
+
+        /* Headings */
+        h2 {
+            font-weight: 500;
+            font-size: 1.75rem;
+            color: #202124;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        /* Material Card Form */
+        .card.form-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 32px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+            /* Material elevation 1 */
+            margin-bottom: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #5f6368;
+        }
+
+        input {
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border: 2px solid #1a73e8;
+            /* Google Blue */
+            padding: 11px 15px;
+            /* Offset the 2px border so it doesn't jump */
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: flex-end;
+        }
+
+        button {
+            padding: 10px 24px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: #1a73e8;
+            /* Google Blue */
+            color: white;
+            border: none;
+            border-radius: 20px;
+            /* Pill shape */
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            font-family: inherit;
+            letter-spacing: 0.25px;
+        }
+
+        button:hover {
+            background-color: #1b66c9;
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+        }
+
+        button.secondary {
+            background-color: transparent;
+            color: #1a73e8;
+            border: 1px solid #dadce0;
+        }
+
+        button.secondary:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Material Layout for Car Cards Grid */
+        #resultado {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            padding-bottom: 40px;
+        }
+
+        /* Material Card for individual car */
+        .car-card {
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+            /* Elevation 1 */
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .car-card:hover {
+            box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+            /* Elevation 2 */
+        }
+
+        .car-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .car-content {
+            padding: 16px;
+            flex-grow: 1;
+        }
+
+        .car-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #202124;
+            margin: 0 0 4px 0;
+        }
+
+        .car-subtitle {
+            font-size: 0.875rem;
+            color: #5f6368;
+            margin: 0 0 12px 0;
+        }
+
+        .car-details {
+            font-size: 0.875rem;
+            color: #3c4043;
+            line-height: 1.5;
+        }
+
+        .car-actions {
+            padding: 8px 16px 16px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-delete {
+            background-color: transparent;
+            color: #d93025;
+            /* Google Red */
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .btn-delete:hover {
+            background-color: #fce8e6;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card form-card">
+        <h2>Mi Colección de Autos</h2>
+        <div class="form-grid">
+            <div class="form-group"><label for="marca">Marca:</label> <input type="text" id="marca"
+                    placeholder="Ej. Nissan"></div>
+            <div class="form-group"><label for="modelo">Modelo:</label> <input type="text" id="modelo"
+                    placeholder="Ej. Skyline GT-R"></div>
+            <div class="form-group"><label for="color">Color:</label> <input type="text" id="color"
+                    placeholder="Ej. Azul"></div>
+            <div class="form-group"><label for="anio">Año:</label> <input type="number" id="anio"
+                    placeholder="Ej. 1999"></div>
+            <div class="form-group"><label for="imagen_url">URL Imagen:</label> <input type="text" id="imagen_url"
+                    placeholder="https://link-de-tu-foto.jpg"></div>
+        </div>
+        <div class="button-group">
+            <button class="secondary" onclick="getAutos()">Ver Autos</button>
+            <button onclick="postAuto()">Guardar Auto</button>
+        </div>
+    </div>
+
+    <div id="resultado"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="callrestapi.js"></script>
+</body>
+
+</html>
