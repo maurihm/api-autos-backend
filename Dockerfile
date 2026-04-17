@@ -13,6 +13,9 @@ RUN npm install --production
 # Copia el resto del código del backend al contenedor
 COPY . .
 
+# Solución a nivel global de Node.js para omitir la validación del certificado (Aiven)
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+
 # Expone el puerto 10000 (puerto por defecto en Render)
 EXPOSE 10000
 

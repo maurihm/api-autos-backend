@@ -9,11 +9,26 @@ const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
 let sequelize;
+
+// --- INICIO DEL PARCHE PARA DOCKER Y AIVEN ---
+// Creamos una copia de la configuración original y le agregamos las reglas SSL
+const extraConfig = {
+  ...config,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false // Esto evita el error "self-signed certificate"
+    }
+  }
+};
+
+// Usamos extraConfig en lugar del config original
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], extraConfig);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database, config.username, config.password, extraConfig);
 }
+// --- FIN DEL PARCHE ---
 
 fs
   .readdirSync(__dirname)
